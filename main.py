@@ -1,6 +1,9 @@
 # Pathfinder - Aditya Saravanan
 # A program for finding the shortest path between two different points.
 
+
+# A node.
+# Meant to act as a single-unit square on a graph.
 class Node:
 
     can_use = True
@@ -22,6 +25,8 @@ class Node:
             return False
         return False
 
+
+# A Board consists of many nodes, tied together to make a graph-like structure.
 class Board:
 
     def __init__(self, x_size, y_size):
@@ -40,4 +45,28 @@ class Board:
                 if Node.check_node_neighbors(node, other_node):
                     node.connections.append(other_node)
 
-def 
+    def find_node_from_coordinates(self, point):
+        for node in self.values:
+            if node.coordinates == point:
+                return node
+
+
+# The BFS (breadth-first-search) algorithm.
+# Interestingly, because all squares are interconnected, it's only possible for this algorithm to yield one path.
+# Nodes on the remainder of the board are 'invalidated' through the 'visited' array.
+def breadth_first_search(board, start_point, end_point):
+
+    queue = []
+    visited = []
+    queue.append((board.find_node_from_coordinates(start_point), [start_point]))
+    visited.append(board.find_node_from_coordinates(start_point))
+
+    while queue:
+        current, path_so_far = queue.pop(0)
+        for movement_node in current.connections:
+            if movement_node not in visited:
+                visited.append(movement_node)
+                if movement_node.coordinates == end_point:
+                    return path_so_far + [end_point]
+                else:
+                    queue.append((movement_node, path_so_far + [movement_node.coordinates]))
