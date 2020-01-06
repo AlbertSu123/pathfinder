@@ -52,21 +52,32 @@ class Board:
 
 
 # The BFS (breadth-first-search) algorithm.
-# Interestingly, because all squares are interconnected, it's only possible for this algorithm to yield one path.
-# Nodes on the remainder of the board are 'invalidated' through the 'visited' array.
 def breadth_first_search(board, start_point, end_point):
-
+    first_node = board.find_node_from_coordinates(start_point)
     queue = []
     visited = []
-    queue.append((board.find_node_from_coordinates(start_point), [start_point]))
-    visited.append(board.find_node_from_coordinates(start_point))
-
+    queue.append((first_node, [start_point]))
+    visited.append(first_node)
     while queue:
-        current, path_so_far = queue.pop(0)
-        for movement_node in current.connections:
+        current_node, path_so_far = queue.pop(0)
+        for movement_node in current_node.connections:
             if movement_node not in visited:
                 visited.append(movement_node)
                 if movement_node.coordinates == end_point:
                     return path_so_far + [end_point]
                 else:
                     queue.append((movement_node, path_so_far + [movement_node.coordinates]))
+
+
+# The DFS (depth-first-search) algorithm.
+def depth_first_search(board, start_point, end_point):
+    first_node = board.find_node_from_coordinates(start_point)
+    def dfs_helper(visited, current_node, path_so_far):
+        if current_node.coordinates == end_point:
+            yield path_so_far
+        else:
+            for movement_node in current_node.connections:
+                if movement_node not in visited:
+                    visited.append(movement_node)
+                    return dfs_helper(visited, movement_node, path_so_far + [movement_node.coordinates])
+    return dfs_helper([first_node], first_node, [start_point])
