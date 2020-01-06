@@ -39,3 +39,5 @@ class Board:
             for other_node in self.values:
                 if Node.check_node_neighbors(node, other_node):
                     node.connections.append(other_node)
+
+def 
