@@ -1,12 +1,13 @@
 # Pathfinder - Aditya Saravanan
-# A program for finding the shortest path between two different points.
+# A program for finding the shortest path between two different points on a 2-D grid.
 
 
-# A node.
-# Meant to act as a single-unit square on a graph.
 class Node:
-
+    """A node, meant to act as a single-unit square on a graph."""
     can_use = True
+    distance = float('inf')
+    weight = 1
+    previous_node = None
 
     def __init__(self, x_pos, y_pos):
         self.coordinates = [x_pos, y_pos]
@@ -26,9 +27,8 @@ class Node:
         return False
 
 
-# A Board consists of many nodes, tied together to make a graph-like structure.
 class Board:
-
+    """A Board consists of many nodes, tied together to make a graph-like structure."""
     def __init__(self, x_size, y_size):
         self.values = []
         self.fill_board(x_size, y_size)
@@ -51,8 +51,8 @@ class Board:
                 return node
 
 
-# The BFS (breadth-first-search) algorithm.
 def breadth_first_search(board, start_point, end_point):
+    """Performs the breadth-first-search algorithm."""
     first_node = board.find_node_from_coordinates(start_point)
     queue = []
     visited = []
@@ -69,8 +69,8 @@ def breadth_first_search(board, start_point, end_point):
                     queue.append((movement_node, path_so_far + [movement_node.coordinates]))
 
 
-# The DFS (depth-first-search) algorithm.
 def depth_first_search(board, start_point, end_point):
+    """Performs the depth-first-search algorithm."""
     first_node = board.find_node_from_coordinates(start_point)
     def dfs_helper(visited, current_node, path_so_far):
         if current_node.coordinates == end_point:
@@ -81,3 +81,57 @@ def depth_first_search(board, start_point, end_point):
                     visited.append(movement_node)
                     return dfs_helper(visited, movement_node, path_so_far + [movement_node.coordinates])
     return dfs_helper([first_node], first_node, [start_point])
+
+
+def dijkstras(board, start_point, end_point):
+    """Performs Dijkstra's algorithm."""
+
+    def dijkstras_helper(final_node):
+        """Takes in the final node after performing Dijkstra's algorithm,
+        backtracks through the "previous_node" attribute to find the shortest path."""
+        current_node = final_node
+        path_reversed = []
+        while current_node is not None:
+            path_reversed.append(current_node.coordinates)
+            current_node = current_node.previous_node
+        return list(reversed(path_reversed))
+
+    for node in board.values:
+        node.distance = float('inf')
+    first_node = board.find_node_from_coordinates(start_point)
+    first_node.distance = 0
+    queue = list(board.values)
+    while queue:
+        minimum_distance_from_root_node = min(queue, key = lambda node: node.distance)
+        queue.remove(minimum_distance_from_root_node)
+        if minimum_distance_from_root_node.coordinates == end_point:
+            return dijkstras_helper(minimum_distance_from_root_node)
+        for movement_node in minimum_distance_from_root_node.connections:
+            if movement_node in queue:
+                temp = minimum_distance_from_root_node.distance + movement_node.weight
+                if temp < movement_node.distance:
+                    movement_node.distance = temp
+                    movement_node.previous_node = minimum_distance_from_root_node
+
+
+def greedy_algorithm():
+    """Performs a greedy (dependent on heuristics) algorithm."""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# complete algs
+# make it possible to remove list of nodes (walls)
+# make it possible to change weights
