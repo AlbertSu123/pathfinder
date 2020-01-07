@@ -2,6 +2,36 @@
 # A program for finding the shortest path between two different points on a 2-D grid.
 
 from classes import *
+import random
+
+
+### Helper Functions ###
+
+def backtrack_path_creator(final_node):
+    """Takes in the final node after performing a pathfinding algorithm,
+    backtracks through the "previous_node" attribute to find the shortest path."""
+    current_node = final_node
+    path_reversed = []
+    while current_node is not None:
+        path_reversed.append(current_node.coordinates)
+        current_node = current_node.previous_node
+    return list(reversed(path_reversed))
+
+def random_wall_creator(x_size, y_size):
+    """Used to make random walls for the board. Makes it so (approximately) 1/4
+    of the board is comprised of walls."""
+    walls = []
+    while len(walls) < ((x_size + 1) * (y_size + 1)) // 4:
+        walls.append([random.randint(0, x_size), random.randint(0, y_size)])
+    return walls
+
+
+### Heuristics ###
+
+def manhattan_distance(start_node, end_node):
+    """A popular heuristic for use with the A* algorithm."""
+    return (abs(start_node.x_coordinate - end_node.x_coordinate)
+            + abs(start_node.y_coordinate - end_node.y_coordinate))
 
 
 ### Algorithms ###
@@ -57,7 +87,7 @@ def dijkstras(board, start_point, end_point):
                     next_node.distance = temp
                     next_node.previous_node = minimum_distance_node
 
-def a_star(board, start_point, end_point, heuristic):
+def a_star(board, start_point, end_point, heuristic=manhattan_distance):
     """Performs the A* pathfinding algorithm, with a heuristic of choice."""
     first_node = board.find_node_from_coordinates(start_point)
     end_node = board.find_node_from_coordinates(end_point)
@@ -76,31 +106,3 @@ def a_star(board, start_point, end_point, heuristic):
                 next_node.distance = temp
                 next_node.previous_node = minimum_distance_node
                 queue.append(next_node)
-
-
-### Helper Functions ###
-
-def backtrack_path_creator(final_node):
-    """Takes in the final node after performing a pathfinding algorithm,
-    backtracks through the "previous_node" attribute to find the shortest path."""
-    current_node = final_node
-    path_reversed = []
-    while current_node is not None:
-        path_reversed.append(current_node.coordinates)
-        current_node = current_node.previous_node
-    return list(reversed(path_reversed))
-
-def random_wall_creator(x_size, y_size):
-    """Used to make random walls for the board."""
-    walls = []
-    while len(walls) < ((x_size + 1) * (y_size + 1)) // 4:
-        walls.append([random.randint(0, x_size + 1), random.randint(0, y_size + 1)])
-    return walls
-
-
-### Heuristics ###
-
-def manhattan_distance(start_node, end_node):
-    """A popular heuristic for use with the A* algorithm."""
-    return (abs(start_node.x_coordinate - end_node.x_coordinate)
-            + abs(start_node.y_coordinate - end_node.y_coordinate))

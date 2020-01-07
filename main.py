@@ -3,70 +3,96 @@
 
 from functions import *
 from classes import *
-import random
+import time
 
 
-### Functions ###
+### Basic Functions ###
 
 def board_creation():
-    try:
-        x_size = input("How long would you like the x-axis of your board to be? The maximum should be 100.")
-        y_size = input("How long would you like the y-axis of your board to be? The maximum should be 100.")
-        walls = wall_creation(x_size, y_size)
-        return Board(x_size, y_size, walls)
+    x_size = int(input("How long would you like the x-axis of your board to be? The maximum should be 100. "))
+    y_size = int(input("\nHow long would you like the y-axis of your board to be? The maximum should be 100. "))
+    walls = wall_creation(x_size, y_size)
+    return Board(x_size, y_size, walls)
 
 def wall_creation(x_size, y_size):
-    need_walls = input("Please enter a list of two-element lists that signifies where you would like the walls to be. Type [] to have no walls, or type 'random' to randomize your walls.")
-    if type(walls) == "list":
-        return need_walls
-    elif "ran" in need_walls:
-        return random_wall_creator(x_size, y_size)
-    else:
-        print("Sorry, what you typed doesn't make sense. Please choose one of the options.")
-        wall_creation(x_size, y_size)
+    need_walls = input("\nRandomizing walls. For user-defined walls, please run by yourself, interactively, in the command line.")
+    return random_wall_creator(x_size, y_size)
 
 def choose_algorithm():
-    print("There are four different kinds of algorithms. Breadth-first-search, depth-first-search, Djikstra's algorithm, and the A* algorithm.")
-    algo_type = input("Which algorithm would you like?")
-    if type(algo_type) == "string":
-        if "*" in algo_type:
-            return a_star
-        elif "dj" in algo_type:
-            return djikstras
-        elif "depth" in algo_type:
-            return depth_first_search
-        elif "brea" in algo_type:
-            return breadth_first_search
-    print("Sorry, what you typed didn't make sense. Please type one of the four algorithms.")
+    print("\nThere are four different kinds of algorithms. Breadth-first-search, depth-first-search, Dijkstra's algorithm, and the A* algorithm.")
+    algo_type = input("\nWhich algorithm would you like? ")
+    if "*" in algo_type:
+        return a_star
+    elif "di" in algo_type.lower():
+        return dijkstras
+    elif "depth" in algo_type.lower():
+        return depth_first_search
+    elif "brea" in algo_type.lower():
+        return breadth_first_search
+    print("\nSorry, what you typed didn't make sense. Please type one of the four algorithms.\n")
     return choose_algorithm()
 
 def choose_start_and_end_points(board):
+    x1 = int(input("\nPlease type the x-value for your desired startpoint. "))
+    y1 = int(input("\nPlease type the y-value for your desired startpoint. "))
+    if not board.find_node_from_coordinates([x1, y1]):
+        print("\nSorry, that startpoint is invalid. Either it's not on the board, or it's a position of a wall. Choose another point, please.\n")
+        return choose_start_and_end_points(board)
+    x2 = int(input("\nPlease type the x-value for your desired endpoint. Remember, your endpoint cannot be your start point. "))
+    y2 = int(input("\nPlease type the y-value for your desired endpoint. Remember, your endpoint cannot be your start point. "))
+    if not board.find_node_from_coordinates([x2, y2]):
+        print("\nSorry, that startpoint is invalid. Either it's not on the board, or it's a position of a wall. Choose another point, please.\n")
+        return choose_start_and_end_points(board)
+    if [x1, y1] == [x2, y2]:
+        print("\nYou chose the same startpoint and endpoint. Please try again.\n")
+        return choose_start_and_end_points(board)
+    return [x1, y1], [x2, y2]
+
+def process_result(start_point, end_point, algorithm, board):
+    start_time = time.process_time()
+    result = algorithm(board, start_point, end_point)
+    time_taken = time.process_time() - start_time
+    if not result or len(result) == 1:
+        print("\nNo path could be found by the algorithm. Either this algorithm is not suited for the task (often the case with DFS) or the startpoint/endpoint is surrounded by walls.")
+    else:
+        print("\nThis was the path found by the algorithm: ", result)
+        print("\nThis was the amount of time that it took the algorithm to find the path: ", time_taken, " seconds")
+    waiting = input("\nPress enter once you are ready to continue. ")
+
+
+def restart(board):
+    restart = input("\nWould you like to keep the same board? Type 'keep'. Otherwise, to restart, type 'restart'. Use Ctrl + C to exit. ")
+    if "k" in restart:
+        loop(board)
+    elif "res" in restart:
+        loop()
+    else:
+        print("\nSorry, what you typed didn't make sense. Make sure to pick one of the options above.\n")
+        restart(board)
+
+
+
+def loop(board=None):
     try:
-        start_point = input("Please type a two-element list of integers for your desired startpoint.")
-        end_point = input("Please type a two-element list of integers for your desired endpoint. Your endpoint cannot be your start point!")
-        if type(start_point) is not "list" or type(end_point) is not "list" or start_point == end_point:
-            print("You did not follow the instructions. Pleas try again.")
-            return choose_start_and_end_points(board)
-        return start_point, end_point
+            if board is None:
+                board = board_creation()
+            algorithm = choose_algorithm()
+            start_point, end_point = choose_start_and_end_points(board)
+            process_result(start_point, end_point, algorithm, board)
+            restart(board)
+    except ValueError as value:
+        print("\nYou didn't enter the proper value(s). Please try again, and follow the instructions. This was the error message: ", value, "\n")
+        loop()
+    except KeyboardInterrupt as key:
+        print("\n\nThanks for using Pathfinder.\n")
 
 
 
-# from board_creation
-    # except TypeError as type:
-    #     print("Sorry! You entered the wrong type of data for an argument.")
-    #     print("Here's the error message: ", type)
 
-# from choose_start_and_end_points
-    #
-    # except ValueError as value:
-    #     print("Sorry, you've chosen a starting or ending value that's a wall.")
-    #     choose_start_and_end_points(board)
+
 
 
 
 
 # handle errors in new main.py, make classes.py, algs.py
-# make it possible to change weights (future)
 # no path?
-# timer!!
-# random walls (1/3)

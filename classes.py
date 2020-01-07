@@ -1,6 +1,9 @@
 # Pathfinder - Aditya Saravanan
 # A program for finding the shortest path between two different points on a 2-D grid.
 
+
+### Classes ###
+
 class Node:
     """A node, meant to act as a single-unit square on a graph."""
     can_use = True
@@ -28,6 +31,8 @@ class Node:
 class Board:
     """A Board consists of many nodes, bound together to make a graph-like structure."""
     def __init__(self, x_size, y_size, walls=[]):
+        if x_size > 100 or y_size > 100:
+            raise ValueError("The size of the board is too big!")
         self.values = []
         self.fill_board(x_size, y_size)
         self.remove_walls(walls)
@@ -42,8 +47,9 @@ class Board:
         iteration_lst = list(self.values)
         for wall_point in walls:
             for node in iteration_lst:
-                if wall_point = node.coordinates:
-                    self.values.remove(node)
+                if wall_point == node.coordinates:
+                    if node in self.values:
+                        self.values.remove(node)
 
     def make_connections(self):
         for node in self.values:
@@ -55,4 +61,4 @@ class Board:
         for node in self.values:
             if node.coordinates == point:
                 return node
-        raise ValueError("Those coordinates do not correspond to a node on the board!")
+        return None
