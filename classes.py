@@ -28,15 +28,23 @@ class Node:
 
 class Board:
     """A Board consists of many nodes, bound together to make a graph-like structure."""
-    def __init__(self, x_size, y_size):
+    def __init__(self, x_size, y_size, walls=[]):
         self.values = []
         self.fill_board(x_size, y_size)
+        self.remove_walls(walls)
         self.make_connections()
 
     def fill_board(self, x_size, y_size):
         for xcounter in range(x_size+1):
             for ycounter in range(y_size+1):
                 self.values.append(Node(xcounter, ycounter))
+
+    def remove_walls(self, walls):
+        iteration_lst = list(self.values)
+        for wall_point in walls:
+            for node in iteration_lst:
+                if wall_point = node.coordinates:
+                    self.values.remove(node)
 
     def make_connections(self):
         for node in self.values:
