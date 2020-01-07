@@ -31,8 +31,6 @@ class Node:
 class Board:
     """A Board consists of many nodes, bound together to make a graph-like structure."""
     def __init__(self, x_size, y_size, walls=[]):
-        if x_size > 100 or y_size > 100:
-            raise ValueError("The size of the board is too big!")
         self.values = []
         self.fill_board(x_size, y_size)
         self.remove_walls(walls)
