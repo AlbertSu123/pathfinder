@@ -90,6 +90,13 @@ def backtrack_path_creator(final_node):
         current_node = current_node.previous_node
     return list(reversed(path_reversed))
 
+def random_wall_creator(x_size, y_size):
+    """Used to make random walls for the board."""
+    walls = []
+    while len(walls) < ((x_size + 1) * (y_size + 1)) // 4:
+        walls.append([random.randint(0, x_size + 1), random.randint(0, y_size + 1)])
+    return walls
+
 
 ### Heuristics ###
 

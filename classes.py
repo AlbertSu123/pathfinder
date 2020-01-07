@@ -25,7 +25,6 @@ class Node:
             return False
         return False
 
-
 class Board:
     """A Board consists of many nodes, bound together to make a graph-like structure."""
     def __init__(self, x_size, y_size, walls=[]):
