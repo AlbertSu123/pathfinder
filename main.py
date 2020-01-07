@@ -15,7 +15,7 @@ def board_creation():
     return Board(x_size, y_size, walls)
 
 def wall_creation(x_size, y_size):
-    need_walls = input("\nRandomizing walls. For user-defined walls, please run by yourself, interactively, in the command line.")
+    need_walls = input("\nPress enter to create and randomize walls. For user-defined walls, please run by yourself, interactively, in the command line.")
     return random_wall_creator(x_size, y_size)
 
 def choose_algorithm():
@@ -53,12 +53,13 @@ def process_result(start_point, end_point, algorithm, board):
     result = algorithm(board, start_point, end_point)
     time_taken = time.process_time() - start_time
     if not result or len(result) == 1:
-        print("\nNo path could be found by the algorithm. Either this algorithm is not suited for the task (often the case with DFS) or the startpoint/endpoint is surrounded by walls.")
+        print("\nNo path could be found by the algorithm. Either this algorithm is not suited for the task (often the case with DFS) or the startpoint/endpoint cannot be reached due to walls.")
     else:
         print("\nThis was the path found by the algorithm: ", result)
         print("\nThis was the amount of time that it took the algorithm to find the path: ", time_taken, " seconds")
     waiting = input("\nPress enter once you are ready to continue. ")
 
+### Execution Functions ###
 
 def restart(board):
     restart = input("\nWould you like to keep the same board? Type 'keep'. Otherwise, to restart, type 'restart'. Use Ctrl + C to exit. ")
@@ -69,7 +70,6 @@ def restart(board):
     else:
         print("\nSorry, what you typed didn't make sense. Make sure to pick one of the options above.\n")
         restart(board)
-
 
 
 def loop(board=None):
@@ -86,13 +86,16 @@ def loop(board=None):
     except KeyboardInterrupt as key:
         print("\n\nThanks for using Pathfinder.\n")
 
+### Runtime Functions ###
+def main():
+    print("\nWelcome to...")
+    print("""
+          ____       _   _      __ _           _
+         |  _ \ __ _| |_| |__  / _(_)_ __   __| | ___ _ __
+         | |_) / _` | __| '_ \| |_| | '_ \ / _` |/ _ \ '__|
+         |  __/ (_| | |_| | | |  _| | | | | (_| |  __/ |
+         |_|   \__,_|\__|_| |_|_| |_|_| |_|\__,_|\___|_|
+                                                   \n""")
+    loop()
 
-
-
-
-
-
-
-
-# handle errors in new main.py, make classes.py, algs.py
-# no path?
+main()
