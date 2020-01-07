@@ -9,16 +9,22 @@ import time
 ### Basic Functions ###
 
 def board_creation():
+    """Creates the board that will be used, with user-specified dimensions."""
     x_size = int(input("How long would you like the x-axis of your board to be? The maximum should be 100. "))
     y_size = int(input("\nHow long would you like the y-axis of your board to be? The maximum should be 100. "))
+    if x_size > 100 or y_size > 100:
+        print("Sorry, the size of the board is too big. Please enter new dimensions.")
+        return board_creation()
     walls = wall_creation(x_size, y_size)
     return Board(x_size, y_size, walls)
 
 def wall_creation(x_size, y_size):
+    """Creates random walls to be placed on the board."""
     need_walls = input("\nPress enter to create and randomize walls. For user-defined walls, please run by yourself, interactively, in the command line.")
     return random_wall_creator(x_size, y_size)
 
 def choose_algorithm():
+    """Allows the user to choose an algorithm to perform on their board."""
     print("\nThere are four different kinds of algorithms. Breadth-first-search, depth-first-search, Dijkstra's algorithm, and the A* algorithm.")
     algo_type = input("\nWhich algorithm would you like? ")
     if "*" in algo_type:
@@ -29,10 +35,11 @@ def choose_algorithm():
         return depth_first_search
     elif "brea" in algo_type.lower():
         return breadth_first_search
-    print("\nSorry, what you typed didn't make sense. Please type one of the four algorithms.\n")
+    print("\nSorry, what you typed didn't make sense. Please choose one of the four algorithms.\n")
     return choose_algorithm()
 
 def choose_start_and_end_points(board):
+    """Allows the user to select the starting and ending points on their board."""
     x1 = int(input("\nPlease type the x-value for your desired startpoint. "))
     y1 = int(input("\nPlease type the y-value for your desired startpoint. "))
     if not board.find_node_from_coordinates([x1, y1]):
@@ -49,30 +56,23 @@ def choose_start_and_end_points(board):
     return [x1, y1], [x2, y2]
 
 def process_result(start_point, end_point, algorithm, board):
+    """Processes the path given the starting point, ending point, algorithm, and
+    board. Prints out the path and the time taken to find the path."""
     start_time = time.process_time()
     result = algorithm(board, start_point, end_point)
     time_taken = time.process_time() - start_time
     if not result or len(result) == 1:
-        print("\nNo path could be found by the algorithm. Either this algorithm is not suited for the task (often the case with DFS) or the startpoint/endpoint cannot be reached due to walls.")
+        print("\nNo path could be found by the algorithm. Either this algorithm is not suited for the task or the startpoint/endpoint cannot be reached due to walls.")
     else:
         print("\nThis was the path found by the algorithm: ", result)
         print("\nThis was the amount of time that it took the algorithm to find the path: ", time_taken, " seconds")
     waiting = input("\nPress enter once you are ready to continue. ")
 
+
 ### Execution Functions ###
 
-def restart(board):
-    restart = input("\nWould you like to keep the same board? Type 'keep'. Otherwise, to restart, type 'restart'. Use Ctrl + C to exit. ")
-    if "k" in restart:
-        loop(board)
-    elif "res" in restart:
-        loop()
-    else:
-        print("\nSorry, what you typed didn't make sense. Make sure to pick one of the options above.\n")
-        restart(board)
-
-
 def loop(board=None):
+    """The main loop of the program, where everything happens."""
     try:
             if board is None:
                 board = board_creation()
@@ -86,8 +86,25 @@ def loop(board=None):
     except KeyboardInterrupt as key:
         print("\n\nThanks for using Pathfinder.\n")
 
+def restart(board):
+    """Function used in mutual recursion with the loop() function to allow the
+    user to choose whether to keep their board or generate a new one after an
+    algorithm runs."""
+    restart = input("\nWould you like to keep the same board? Type 'keep'. Otherwise, to restart, type 'restart'. Use Ctrl + C to exit. ")
+    if "k" in restart:
+        loop(board)
+    elif "res" in restart:
+        loop()
+    else:
+        print("\nSorry, what you typed didn't make sense. Make sure to pick one of the options above.\n")
+        restart(board)
+
+
 ### Runtime Functions ###
+
 def main():
+    """A function used as an introduction to the program, and to run the program's
+    main loop."""
     print("\nWelcome to...")
     print("""
           ____       _   _      __ _           _
