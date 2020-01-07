@@ -19,7 +19,8 @@ def backtrack_path_creator(final_node):
 
 def random_wall_creator(x_size, y_size):
     """Used to make random walls for the board. Makes it so (approximately) 1/4
-    of the board is comprised of walls."""
+    of the board is comprised of walls. Walls created in this function may not be
+    unique, but each wall only counts once."""
     walls = []
     while len(walls) < ((x_size + 1) * (y_size + 1)) // 4:
         walls.append([random.randint(0, x_size), random.randint(0, y_size)])
