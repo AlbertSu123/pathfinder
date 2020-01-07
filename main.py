@@ -115,7 +115,7 @@ def a_star(board, start_point, end_point, heuristic):
         queue.remove(minimum_distance_from_root_node)
         if minimum_distance_from_root_node.coordinates == end_point:
             return backtrack_path_creator(minimum_distance_from_root_node)
-        for movement_node in minimum_distance_from_root_node.coordinates:
+        for movement_node in minimum_distance_from_root_node.connections:
             temp = minimum_distance_from_root_node.distance + heuristic(movement_node, end_node) + movement_node.weight
             if temp < movement_node.distance:
                 movement_node.distance = temp
@@ -153,7 +153,8 @@ def backtrack_path_creator(final_node):
 
 def manhattan_distance(start_node, end_node):
     """A popular heuristic for use with the A* algorithm."""
-    return abs(start_node.x_coordinate - end_node.x_coordinate) + abs(start_node.y_coordinate - end_node.y_coordinate)
+    return (abs(start_node.x_coordinate - end_node.x_coordinate)
+            + abs(start_node.y_coordinate - end_node.y_coordinate))
 
 
 
@@ -172,7 +173,7 @@ def manhattan_distance(start_node, end_node):
 
 
 
-# complete algs (bidirectional, a_star)
+# complete algs (bidirectional)
 # clean up code (when no path, etc.)
 # handle errors in new main.py, make classes.py, algs.py
 # make it possible to remove list of nodes (walls) (before creation of connections)
