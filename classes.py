@@ -32,6 +32,8 @@ class Board:
     """A Board consists of many nodes, bound together to make a graph-like structure."""
     def __init__(self, x_size, y_size, walls=[]):
         self.values = []
+        self.x_size = x_size
+        self.y_size = y_size
         self.fill_board(x_size, y_size)
         self.remove_walls(walls)
         self.make_connections()
