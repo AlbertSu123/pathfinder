@@ -38,7 +38,7 @@ def manhattan_distance(start_node, end_node):
 ### Algorithms ###
 
 def breadth_first_search(board, start_point, end_point):
-    """Performs the breadth-first-search pathfinding algorithm."""
+    """Performs the breadth-first-search (BFS) pathfinding algorithm."""
     start_node = board.find_node_from_coordinates(start_point)
     queue = []
     visited = []
@@ -55,7 +55,7 @@ def breadth_first_search(board, start_point, end_point):
                     queue.append((next_node, path_so_far + [next_node.coordinates]))
 
 def depth_first_search(board, start_point, end_point):
-    """Performs the depth-first-search pathfinding algorithm."""
+    """Performs the depth-first-search (DFS) pathfinding algorithm."""
     start_node = board.find_node_from_coordinates(start_point)
 
     def dfs_helper(visited, current_node, path_so_far):

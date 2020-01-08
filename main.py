@@ -64,12 +64,11 @@ def process_result(start_point, end_point, algorithm, board):
     time_taken = time.process_time() - start_time
     if not result or len(result) == 1:
         print("\nNo path could be found by the algorithm. Either this algorithm is not suited for the task or the startpoint/endpoint cannot be reached due to walls.")
-        print("\nPlease see the other window for a picture of the board.")
         result = []
     else:
         print("\nThis was the path found by the algorithm: ", result)
         print("\nThis was the amount of time that it took the algorithm to find the path: ", time_taken, " seconds")
-        print("\nPlease see the other window for a picture of the board. Exit the window to continue.")
+    print("\nPlease see the other window for a picture of the board. Exit the window to continue.")
     draw_board(board, result)
 
 
@@ -92,7 +91,7 @@ def loop(board=None):
 
 def restart(board):
     """Function used in mutual recursion with the loop() function to allow the
-    user to choose whether to keep their board or generate a new one after an
+    user to choose whether to keep their board, or generate a new one after an
     algorithm runs."""
     want_to_restart = input("\nWould you like to keep the same board? Type 'keep'. Otherwise, to restart, type 'restart'. Use Ctrl + C, then Enter, to exit. ")
     if "k" in want_to_restart:

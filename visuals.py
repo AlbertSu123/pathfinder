@@ -6,7 +6,6 @@ from classes import *
 import matplotlib.pyplot as plt
 from matplotlib import colors
 import numpy as np
-import time
 
 
 ### Helper Functions ###
@@ -30,9 +29,11 @@ def convert_board_to_map(board, visited):
     return list(reversed(reversed_board_array))
 
 
-# Drawing Functions ###
+### Drawing Functions ###
 
 def draw_board(board, visited):
+    """Draws the board. Red squares are path squares, white squares are unvisited
+    squares, and black squares are wall squares."""
     data = convert_board_to_map(board, visited)
     color_map = colors.ListedColormap(['black', 'white', 'red'])
     bounds = [0, 10, 20, 30]
@@ -40,10 +41,10 @@ def draw_board(board, visited):
     fig, ax = plt.subplots()
     ax.imshow(data, cmap=color_map, norm=norm)
     ax.grid(which='major', axis='both', linestyle='-', color='k', linewidth=2)
-    ax.set_xticks(np.arange(-.5, board.x_size+1, 1));
-    ax.set_yticks(np.arange(-.5, board.y_size+1, 1));
-    ax.set_xticklabels([]);
-    ax.set_yticklabels([]);
+    ax.set_xticks(np.arange(-.5, board.x_size+1, 1))
+    ax.set_yticks(np.arange(-.5, board.y_size+1, 1))
+    ax.set_xticklabels([])
+    ax.set_yticklabels([])
     plt.tight_layout()
     plt.show()
-    plt.close()
+    plt.close(fig)
